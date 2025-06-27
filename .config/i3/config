@@ -1,0 +1,258 @@
+# i3 설정 파일
+# ~/.config/i3/config
+
+# --- 기본 설정 ---
+# Mod 키 설정 (Mod1 = Alt, Mod4 = Super/Windows 키)
+set $mod Mod4
+
+# 글꼴 설정 (X Logical Font Description)
+# font pango:monospace 8
+font pango:DejaVu Sans Mono 10
+# Nerd Font 사용 시 (아이콘 표시)
+# font pango:Hack Nerd Font Mono 10
+
+# 터미널 에뮬레이터 설정
+set $term wezterm
+# set $term kitty
+# set $term alacritty
+
+# 애플리케이션 실행기 (dmenu, rofi 등)
+set $menu rofi -show drun
+# set $menu dmenu_run
+
+# 상태 표시줄 (i3bar) 설정
+bar {
+    status_command i3status
+    position top
+    # tray_output primary # 트레이 아이콘을 주 모니터에 표시 (필요시 주석 해제)
+    font pango:DejaVu Sans Mono 10
+    colors {
+        background #222222
+        statusline #dddddd
+        separator #666666
+
+        focused_workspace  #444499 #285577 #ffffff
+        active_workspace   #333333 #5f676a #ffffff
+        inactive_workspace #333333 #222222 #888888
+        urgent_workspace   #2f343a #900000 #ffffff
+        binding_mode       #2f343a #900000 #ffffff
+    }
+}
+
+# --- 창 관리 ---
+# 새 창 기본 레이아웃 (splith: 가로, splitv: 세로, tabbed: 탭, stacking: 스택)
+# default_orientation horizontal
+
+# 창 테두리 스타일 (normal, 1pixel, pixel <n>, none)
+new_window pixel 2
+# new_window none # 타일링만 사용 시 테두리 없음
+
+# 부동 창(floating window) 활성화/비활성화
+floating_modifier $mod
+
+# 창 포커스 방식 (mouse, sloppy, title)
+focus_follows_mouse no
+
+# --- 키 바인딩 ---
+
+# 터미널 실행
+bindsym $mod+Return exec $term
+
+# 애플리케이션 실행기
+bindsym $mod+d exec $menu
+
+# 창 닫기
+bindsym $mod+Shift+q kill
+
+# i3 재시작
+bindsym $mod+Shift+r restart
+
+# i3 종료 (로그아웃)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m '정말로 i3를 종료하시겠습니까?' -B '예, 종료합니다' 'i3-msg exit'"
+
+# 포커스 변경
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+# 화살표 키로도 포커스 변경
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+# 창 이동
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+# 화살표 키로도 창 이동
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# 레이아웃 변경 (splith, splitv, tabbed, stacking, toggle split)
+bindsym $mod+e layout splith # 가로 분할
+bindsym $mod+v layout splitv # 세로 분할
+bindsym $mod+s layout stacking # 스택 레이아웃
+bindsym $mod+w layout tabbed # 탭 레이아웃
+bindsym $mod+Shift+space layout toggle split # 분할 방향 전환
+
+# 부동 모드 토글
+bindsym $mod+Shift+f floating toggle
+
+# 전체 화면 모드 토글
+bindsym $mod+f fullscreen toggle
+
+# 컨테이너 변경 (현재 창을 부모 컨테이너로 이동)
+bindsym $mod+Shift+p move container to workspace current
+
+# 스크래치패드 (scratchpad)
+# bindsym $mod+minus move scratchpad # 현재 창을 스크래치패드로 이동
+# bindsym $mod+Shift+minus scratchpad show # 스크래치패드 보이기/숨기기
+
+# 창 크기 조절 (리사이즈 모드)
+mode "resize" {
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# --- 워크스페이스 (Workspace) ---
+# 워크스페이스 이름 정의 (숫자 또는 이름)
+set $ws1 "1: "  # 터미널
+set $ws2 "2: "  # 웹 브라우저 (예: Firefox 아이콘)
+set $ws3 "3: "  # 코드 편집기 (예: Pencil 아이콘)
+set $ws4 "4: "  # 파일 탐색기 (예: Folder 아이콘)
+set $ws5 "5: "  # 채팅/메신저 (예: Comments 아이콘)
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9: "  # 문서/Jupyter (예: File-alt 아이콘)
+set $ws10 "10: " # 음악 (예: Music 아이콘)
+
+# 워크스페이스 이동
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10 # $mod+10 대신 $mod+0 사용
+
+# 현재 창을 워크스페이스로 이동
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# 이전/다음 워크스페이스로 이동
+bindsym $mod+Ctrl+h workspace prev
+bindsym $mod+Ctrl+l workspace next
+bindsym $mod+Ctrl+Left workspace prev
+bindsym $mod+Ctrl+Right workspace next
+
+# --- 특정 애플리케이션을 특정 워크스페이스에 할당 ---
+# assign [class="(?i)firefox"] $ws2
+# assign [class="(?i)code"] $ws3 # VSCode
+# assign [class="(?i)Nautilus"] $ws4 # GNOME Files
+# assign [class="(?i)discord"] $ws5
+
+# 데이터 과학 도구 예시 (필요에 따라 수정)
+# assign [class="(?i)jupyter-notebook"] $ws9
+# assign [class="(?i)jupyter-lab"] $ws9
+# assign [class="(?i)RStudio"] $ws9
+
+# --- 부동 창 설정 ---
+# 특정 창을 항상 부동 모드로 열기
+# for_window [class="Galculator"] floating enable
+# for_window [window_role="pop-up"] floating enable
+# for_window [window_role="bubble"] floating enable
+# for_window [window_role="dialog"] floating enable
+# for_window [window_type="dialog"] floating enable
+# for_window [class="(?i)pavucontrol"] floating enable border pixel 1
+# for_window [class="(?i)nitrogen"] floating enable sticky enable border pixel 1
+# for_window [class="(?i)lxappearance"] floating enable sticky enable border pixel 1
+
+# --- 자동 시작 프로그램 ---
+# i3 시작 시 실행할 프로그램들
+exec --no-startup-id nitrogen --restore # 배경화면 설정 (nitrogen 사용 시)
+exec --no-startup-id picom --config ~/.config/picom/picom.conf # 컴포지터 (투명도 등)
+# exec --no-startup-id nm-applet # 네트워크 매니저 애플릿
+# exec --no-startup-id blueman-applet # 블루투스 애플릿
+# exec --no-startup-id dunst # 알림 데몬
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork # 화면 잠금 (i3lock 사용 시)
+# exec --no-startup-id flameshot # 스크린샷 도구 (백그라운드 실행)
+
+# 키보드 레이아웃 설정 (필요시)
+# exec --no-startup-id setxkbmap -layout us,kr -option grp:alt_shift_toggle # 한/영 전환 (Alt+Shift)
+
+# --- 화면 잠금 ---
+# bindsym $mod+Ctrl+l exec i3lock -c 000000 # 화면 잠금 (i3lock 사용 시)
+
+# --- 시스템 제어 (종료, 재부팅) ---
+# set $Locker i3lock
+# set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+# mode "$mode_system" {
+#     bindsym l exec --no-startup-id $Locker, mode "default"
+#     bindsym e exec --no-startup-id i3-msg exit, mode "default"
+#     bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+#     bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+#     bindsym r exec --no-startup-id systemctl reboot, mode "default"
+#     bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
+#     bindsym Escape mode "default"
+#     bindsym Return mode "default"
+# }
+# bindsym $mod+Escape mode "$mode_system"
+
+# 이 설정은 기본적인 i3 환경을 제공합니다.
+# 사용자의 필요에 맞게 수정하고 확장하여 사용하세요.
+# 주석 처리된 부분들은 선택적으로 활성화할 수 있는 기능들입니다.
+# Nerd Font를 사용하려면 해당 폰트가 시스템에 설치되어 있어야 합니다.
+# 애플리케이션 클래스 이름은 `xprop WM_CLASS` 명령으로 확인할 수 있습니다.## i3 설정 파일 초안 작성 완료
+
+i3 윈도우 매니저 설정 파일 (`.config/i3/config`)의 초안 작성을 완료했습니다. 주요 내용은 다음과 같습니다:
+
+*   **기본 설정:** Mod 키, 글꼴, 터미널 에뮬레이터, 애플리케이션 실행기 설정.
+*   **i3bar 설정:** 상태 표시줄 (i3status 연동) 및 색상 설정.
+*   **창 관리:** 새 창 레이아웃, 테두리 스타일, 포커스 방식.
+*   **키 바인딩:**
+    *   터미널 및 애플리케이션 실행기 실행.
+    *   창 닫기, i3 재시작/종료.
+    *   포커스 및 창 이동 (방향키 포함).
+    *   레이아웃 변경 (가로/세로 분할, 탭, 스택).
+    *   부동 모드 및 전체 화면 토글.
+    *   창 크기 조절 모드.
+*   **워크스페이스:**
+    *   이름 정의 (Nerd Font 아이콘 예시 포함).
+    *   워크스페이스 이동 및 현재 창을 다른 워크스페이스로 이동.
+    *   이전/다음 워크스페이스 이동.
+    *   (주석 처리) 특정 애플리케이션을 특정 워크스페이스에 할당하는 예시 (데이터 과학 도구 포함).
+*   **부동 창 설정:** (주석 처리) 특정 창을 항상 부동 모드로 여는 예시.
+*   **자동 시작 프로그램:** (주석 처리) i3 시작 시 실행할 프로그램 예시 (배경화면, 컴포지터, 애플릿 등).
+*   **기타:** (주석 처리) 화면 잠금 및 시스템 제어 관련 모드 설정 예시.
+
+모든 설정 항목에 한글 주석을 추가하여 이해를 돕도록 했습니다. 사용자는 이 파일을 바탕으로 자신의 환경과 필요에 맞게 수정하여 사용할 수 있습니다.
+
+```
