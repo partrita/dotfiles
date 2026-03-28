@@ -22,6 +22,9 @@ HISTFILESIZE=2000
 # Security: Ignore history logging of commands containing sensitive keywords
 HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
 
+# Security: Set default file permissions (readable/writable by user, readable by group, inaccessible by others)
+umask 027
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
