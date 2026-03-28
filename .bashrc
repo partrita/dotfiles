@@ -7,6 +7,10 @@
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+# Security: Ignore history logging of commands starting with space or containing sensitive keywords
+HISTCONTROL=ignoreboth
+HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
+
 # 프롬프트 설정 (사용자명@호스트명:현재경로$)
 PS1='\[\e[32m\]\u@\h\[\e[00m\]:\[\e[34m\]\w\[\e[00m\]\$ '
 
