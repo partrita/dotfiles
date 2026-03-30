@@ -11,6 +11,9 @@ HISTFILESIZE=2000
 HISTCONTROL=ignoreboth
 HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
 
+# Security: Set default file permissions (readable/writable by user, readable by group, inaccessible by others)
+umask 027
+
 # 프롬프트 설정 (사용자명@호스트명:현재경로$)
 PS1='\[\e[32m\]\u@\h\[\e[00m\]:\[\e[34m\]\w\[\e[00m\]\$ '
 
