@@ -136,7 +136,7 @@ export LD_LIBRARY_PATH="/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PA
 . "$HOME/.cargo/env"
 
 alias please="sudo"
-export PATH=$HOME/miniforge3/bin:$PATH
+export PATH="$HOME/miniforge3/bin${PATH:+:${PATH}}"
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -147,7 +147,7 @@ else
     if [ -f "/home/fkt/miniforge3/etc/profile.d/conda.sh" ]; then
         . "/home/fkt/miniforge3/etc/profile.d/conda.sh"
     else
-        export PATH="/home/fkt/miniforge3/bin:$PATH"
+        export PATH="/home/fkt/miniforge3/bin${PATH:+:${PATH}}"
     fi
 fi
 unset __conda_setup
