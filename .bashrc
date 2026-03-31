@@ -14,6 +14,11 @@ HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
 # Security: Set default file permissions (readable/writable by user, readable by group, inaccessible by others)
 umask 027
 
+# Security: Auto-logout idle sessions after 10 minutes
+TMOUT=600
+readonly TMOUT
+export TMOUT
+
 # 프롬프트 설정 (사용자명@호스트명:현재경로$)
 PS1='\[\e[32m\]\u@\h\[\e[00m\]:\[\e[34m\]\w\[\e[00m\]\$ '
 
@@ -43,7 +48,7 @@ export EDITOR=nvim
 # export EDITOR=vim # Neovim을 기본으로 사용하고, vim은 주석 처리
 
 # PATH 환경변수 추가 (필요시)
-# export PATH="/usr/local/opt/python/libexec/bin:$PATH"
+# export PATH="/usr/local/opt/python/libexec/bin${PATH:+:${PATH}}"
 
 # 데이터 사이언스 프로젝트용 디렉토리 바로가기 (예시)
 alias cdproject='cd ~/projects/datascience'
@@ -95,5 +100,5 @@ alias gcmsg='git commit -m'
 # if type nvim > /dev/null 2>&1; then
 #   # Neovim 관련 셸 설정
 #   # Neovim 플러그인 관리를 위한 PATH 설정 등
-#   # export PATH="$HOME/.local/share/nvim/mason/bin:$PATH" # Mason LSP 설치 경로 (예시)
+#   # export PATH="$HOME/.local/share/nvim/mason/bin${PATH:+:${PATH}}" # Mason LSP 설치 경로 (예시)
 # fi
