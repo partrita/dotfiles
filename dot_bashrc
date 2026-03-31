@@ -25,6 +25,11 @@ HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
 # Security: Set default file permissions (readable/writable by user, readable by group, inaccessible by others)
 umask 027
 
+# Security: Auto-logout idle sessions after 10 minutes
+TMOUT=600
+readonly TMOUT
+export TMOUT
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -128,8 +133,8 @@ eval "$(starship init bash)"
 #export export PATH=/usr/local/cuda-11.7/bin${PATH:+:${PATH}}
 #export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64\
 #                         ${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-#export LD_LIBRARY_PATH=/usr/lib/cuda/lib64:$LD_LIBRARY_PATH
-#export LD_LIBRARY_PATH=/usr/lib/cuda/include:$LD_LIBRARY_PATH
+#export LD_LIBRARY_PATH="/usr/lib/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+#export LD_LIBRARY_PATH="/usr/lib/cuda/include${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 export PATH="/usr/local/cuda/bin${PATH:+:${PATH}}"
 export LD_LIBRARY_PATH="/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 
