@@ -8,8 +8,20 @@ HISTSIZE=1000
 HISTFILESIZE=2000
 
 # Security: Ignore history logging of commands starting with space or containing sensitive keywords
-HISTCONTROL=ignoreboth
-HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
+if [[ -z "${HISTCONTROL+x}" || ! "$(declare -p HISTCONTROL 2>/dev/null)" =~ "declare -r" ]]; then
+    HISTCONTROL=ignoreboth
+    readonly HISTCONTROL
+fi
+
+if [[ -z "${HISTIGNORE+x}" || ! "$(declare -p HISTIGNORE 2>/dev/null)" =~ "declare -r" ]]; then
+    HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
+    readonly HISTIGNORE
+fi
+
+# Security: Immediately append commands to history for accurate audit logging
+if [[ ! "$PROMPT_COMMAND" =~ "history -a" ]]; then
+    export PROMPT_COMMAND="history -a${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
+fi
 
 # Security: Set default file permissions (readable/writable by user, readable by group, inaccessible by others)
 umask 027

@@ -7,3 +7,8 @@
 **Vulnerability:** Assigning `export LD_LIBRARY_PATH=/path:$LD_LIBRARY_PATH` when the variable is initially empty results in a trailing colon. This evaluates to the current working directory, introducing a local library hijacking vulnerability.
 **Learning:** Hardcoded `$PATH` or `$LD_LIBRARY_PATH` concatenations often fail to account for the empty state of these variables, silently exposing the system to directory traversal or hijacking risks.
 **Prevention:** Always use conditional parameter expansion (e.g., `${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}`) to append to path lists, ensuring colons are only added when the variable is non-empty.
+
+## 2024-05-24 - [Ensure Immutable and Immediate Bash Audit Logging]
+**Vulnerability:** Bash by default only writes history to disk on exit. In the event of a terminal crash, or multiple parallel sessions, critical audit logs containing executed commands may be lost or overwritten. Furthermore, users or malicious scripts can dynamically unset history filtering variables (`HISTCONTROL`, `HISTIGNORE`), causing subsequent commands with sensitive data to be logged.
+**Learning:** Depending solely on `HISTIGNORE` without enforcing its immutability leaves a window where auditing can be disabled or tampered with by processes running in the shell session. Additionally, delaying history writes compromises the integrity of audit trails.
+**Prevention:** Configure `PROMPT_COMMAND` to immediately append to history (`history -a`), and enforce immutability on history security controls (`readonly HISTCONTROL HISTIGNORE`) within profile scripts.
