@@ -7,3 +7,8 @@
 **Vulnerability:** Assigning `export LD_LIBRARY_PATH=/path:$LD_LIBRARY_PATH` when the variable is initially empty results in a trailing colon. This evaluates to the current working directory, introducing a local library hijacking vulnerability.
 **Learning:** Hardcoded `$PATH` or `$LD_LIBRARY_PATH` concatenations often fail to account for the empty state of these variables, silently exposing the system to directory traversal or hijacking risks.
 **Prevention:** Always use conditional parameter expansion (e.g., `${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}`) to append to path lists, ensuring colons are only added when the variable is non-empty.
+
+## 2024-04-02 - [Prevent Re-sourcing Errors with Readonly Variables]
+**Vulnerability:** Assigning `readonly` to a variable like `TMOUT` without checking if it is already read-only causes the bash script to error and stop execution when re-sourced. Using naive checks like `readonly -p | grep -qw TMOUT` or `[[ ! "$(declare -p TMOUT)" =~ "declare -r" ]]` introduces a bypass because they match substrings in the entire output, including other variables' values (e.g. `declare -r MYVAR="TMOUT"` or `export TMOUT="declare -r"`).
+**Learning:** Checking for `readonly` status requires strict matching to avoid value spoofing and correctly handle alphabetical flag ordering.
+**Prevention:** Always use `readonly -p | grep -q "^declare -[^ =]*r[^ =]* VAR_NAME="` to strictly verify if a variable is marked as read-only by matching only the declaration part. Example: `if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* TMOUT="; then TMOUT=600; readonly TMOUT; export TMOUT; fi`.
