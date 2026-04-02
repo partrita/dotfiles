@@ -136,6 +136,29 @@ ENV/
 env.bak/
 venv.bak/
 
+# Security & Secrets (Prevent accidental commit of sensitive files)
+*.key
+*.pem
+*.cer
+*.cert
+*.p12
+*.pfx
+*id_rsa*
+*id_ed25519*
+*id_dsa*
+*id_ecdsa*
+*.history
+.bash_history
+.zsh_history
+.python_history
+.sqlite_history
+.mysql_history
+.psql_history
+.netrc
+.npmrc
+credentials.json
+client_secret.json
+
 # Spyder project settings
 .spyderproject
 .spyproject

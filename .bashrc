@@ -15,9 +15,11 @@ HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
 umask 027
 
 # Security: Auto-logout idle sessions after 10 minutes
-TMOUT=600
-readonly TMOUT
-export TMOUT
+if [[ ! "$(declare -p TMOUT 2>/dev/null)" =~ "declare -r" ]]; then
+    TMOUT=600
+    readonly TMOUT
+    export TMOUT
+fi
 
 # 프롬프트 설정 (사용자명@호스트명:현재경로$)
 PS1='\[\e[32m\]\u@\h\[\e[00m\]:\[\e[34m\]\w\[\e[00m\]\$ '

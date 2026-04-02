@@ -7,3 +7,8 @@
 **Vulnerability:** Assigning `export LD_LIBRARY_PATH=/path:$LD_LIBRARY_PATH` when the variable is initially empty results in a trailing colon. This evaluates to the current working directory, introducing a local library hijacking vulnerability.
 **Learning:** Hardcoded `$PATH` or `$LD_LIBRARY_PATH` concatenations often fail to account for the empty state of these variables, silently exposing the system to directory traversal or hijacking risks.
 **Prevention:** Always use conditional parameter expansion (e.g., `${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}`) to append to path lists, ensuring colons are only added when the variable is non-empty.
+
+## 2024-06-25 - [Prevent Accidental Secret Commits in Dotfiles]
+**Vulnerability:** Dotfiles repositories are prone to accidentally committing local history files (e.g., `.bash_history`), SSH keys (e.g., `id_rsa`), certificates, and credential files if they are not explicitly ignored.
+**Learning:** Developers often track entire home directories or deeply nested `.config` folders, silently staging and pushing sensitive artifacts that get created alongside dotfiles.
+**Prevention:** Always maintain a comprehensive `Security & Secrets` exclusion section in `.gitignore` covering `*.key`, `*.pem`, `*.history`, and common credential files.

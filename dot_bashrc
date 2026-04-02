@@ -26,9 +26,11 @@ HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
 umask 027
 
 # Security: Auto-logout idle sessions after 10 minutes
-TMOUT=600
-readonly TMOUT
-export TMOUT
+if [[ ! "$(declare -p TMOUT 2>/dev/null)" =~ "declare -r" ]]; then
+    TMOUT=600
+    readonly TMOUT
+    export TMOUT
+fi
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
