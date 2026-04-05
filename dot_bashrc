@@ -22,6 +22,10 @@ HISTFILESIZE=2000
 # Security: Ignore history logging of commands containing sensitive keywords
 HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
 
+# Security: Add timestamps to history for audit logging and flush immediately
+export HISTTIMEFORMAT="%F %T "
+export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND:-}"
+
 # Security: Set default file permissions (readable/writable by user, readable by group, inaccessible by others)
 umask 027
 
