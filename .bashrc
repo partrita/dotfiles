@@ -15,6 +15,13 @@ HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
 export HISTTIMEFORMAT="%F %T "
 export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND:-}"
 
+# Security: Prevent tampering with history variables by making them readonly
+for var in HISTFILE HISTSIZE HISTFILESIZE HISTIGNORE HISTCONTROL HISTTIMEFORMAT; do
+    if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* ${var}="; then
+        readonly ${var}
+    fi
+done
+
 # Security: Set default file permissions (readable/writable by user, readable by group, inaccessible by others)
 umask 027
 

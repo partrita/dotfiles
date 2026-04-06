@@ -12,3 +12,8 @@
 **Vulnerability:** Assigning `readonly` to a variable like `TMOUT` without checking if it is already read-only causes the bash script to error and stop execution when re-sourced. Using naive checks like `readonly -p | grep -qw TMOUT` or `[[ ! "$(declare -p TMOUT)" =~ "declare -r" ]]` introduces a bypass because they match substrings in the entire output, including other variables' values (e.g. `declare -r MYVAR="TMOUT"` or `export TMOUT="declare -r"`).
 **Learning:** Checking for `readonly` status requires strict matching to avoid value spoofing and correctly handle alphabetical flag ordering.
 **Prevention:** Always use `readonly -p | grep -q "^declare -[^ =]*r[^ =]* VAR_NAME="` to strictly verify if a variable is marked as read-only by matching only the declaration part. Example: `if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* TMOUT="; then TMOUT=600; readonly TMOUT; export TMOUT; fi`.
+
+## 2024-04-06 - Enforce Audit Logging Integrity
+**Vulnerability:** Bash history variables (`HISTFILE`, `HISTSIZE`, `HISTIGNORE`, `HISTCONTROL`, `HISTTIMEFORMAT`) were mutable. A local attacker or malicious script could unset or modify them (e.g., `export HISTFILE=/dev/null`) to cover their tracks and bypass audit logging.
+**Learning:** Setting security-critical bash variables is insufficient if they can be easily overridden later in the session.
+**Prevention:** Apply `readonly` to history-related variables to ensure audit logging remains active and cannot be tampered with. Check if they are already readonly before applying to allow re-sourcing of the file without errors.
