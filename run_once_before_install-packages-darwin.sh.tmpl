@@ -28,12 +28,12 @@ printf '\nInitiating Homebrew update...\n'
 brew update
 
 printf '\nInstalling packages...\n'
-brew install ${PACKAGES[@]}
+brew install "${PACKAGES[@]}"
 
 printf '\n\nRemoving out of date packages...\n'
 brew cleanup
 
 printf '\n\nInstalling cask apps...\n'
-brew install --cask ${CASKS[@]}
+brew install --cask "${CASKS[@]}"
 
 {{ end -}}

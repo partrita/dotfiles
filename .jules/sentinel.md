@@ -17,3 +17,8 @@
 **Vulnerability:** Bash history variables (`HISTFILE`, `HISTSIZE`, `HISTIGNORE`, `HISTCONTROL`, `HISTTIMEFORMAT`) were mutable. A local attacker or malicious script could unset or modify them (e.g., `export HISTFILE=/dev/null`) to cover their tracks and bypass audit logging.
 **Learning:** Setting security-critical bash variables is insufficient if they can be easily overridden later in the session.
 **Prevention:** Apply `readonly` to history-related variables to ensure audit logging remains active and cannot be tampered with. Check if they are already readonly before applying to allow re-sourcing of the file without errors.
+
+## 2026-04-07 - [Bash Array Expansion Security]
+**Vulnerability:** Unquoted array expansions (e.g., `${ARRAY[@]}`) in shell scripts allow word splitting. This can lead to unintended package installations or command injection if an array contains strings with spaces.
+**Learning:** Even when arrays contain seemingly static data, they should be quoted defensively to prevent vulnerabilities during future modifications or if they eventually handle dynamic data.
+**Prevention:** Always use `"${ARRAY[@]}"` instead of `${ARRAY[@]}` to preserve elements as single words.
