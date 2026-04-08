@@ -43,6 +43,9 @@ if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* TMOUT="; then
     export TMOUT
 fi
 
+# Security: Disable core dumps to prevent sensitive data exposure from process memory on crash
+ulimit -S -c 0
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
