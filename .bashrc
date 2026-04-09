@@ -32,6 +32,9 @@ if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* TMOUT="; then
     export TMOUT
 fi
 
+# Security: Disable core dumps to prevent sensitive data exposure from process memory on crash
+ulimit -S -c 0
+
 # 프롬프트 설정 (사용자명@호스트명:현재경로$)
 PS1='\[\e[32m\]\u@\h\[\e[00m\]:\[\e[34m\]\w\[\e[00m\]\$ '
 

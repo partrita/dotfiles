@@ -22,3 +22,8 @@
 **Vulnerability:** Unquoted array expansions (e.g., `${ARRAY[@]}`) in shell scripts allow word splitting. This can lead to unintended package installations or command injection if an array contains strings with spaces.
 **Learning:** Even when arrays contain seemingly static data, they should be quoted defensively to prevent vulnerabilities during future modifications or if they eventually handle dynamic data.
 **Prevention:** Always use `"${ARRAY[@]}"` instead of `${ARRAY[@]}` to preserve elements as single words.
+
+## 2024-04-08 - [Disable Core Dumps to Prevent Information Disclosure]
+**Vulnerability:** By default, Linux systems might be configured to generate core dumps when a program crashes. These files contain the memory state of the process at the time of the crash. If a process handling sensitive data (passwords, API keys, private keys, authentication tokens) crashes, this sensitive information can be written to disk in plain text within the core dump file, making it accessible to anyone with read access to the file.
+**Learning:** Development and general user environments often overlook process memory lifecycle. While debugging symbols and memory dumps are useful for developers, leaving them enabled globally in dotfiles poses a significant and unnecessary risk of post-crash credential exposure.
+**Prevention:** Disable core dump generation at the shell level in startup scripts (e.g., `.bashrc`, `dot_bashrc`) by adding `ulimit -S -c 0`. This acts as a defense-in-depth measure, ensuring that even if an application fails securely in code, its memory footprint isn't inadvertently leaked to the file system.
