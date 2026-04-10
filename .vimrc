@@ -38,9 +38,11 @@ set wildmode=longest,list,full " 자동 완성 방식 설정
 " set nobackup          " 백업 파일 생성 안 함
 " set nowritebackup     " 쓰기 전에 백업 파일 생성 안 함 (데이터 유실 위험 약간 증가)
 " set noswapfile        " 스왑 파일 (.swp) 생성 안 함 (복구 기능 비활성화)
-" 백업 및 스왑 파일 저장 위치 지정 (선택 사항)
+" 백업, 스왑 및 언두 파일 저장 위치 지정 (보안: 프로젝트 폴더 내 민감 정보 유출 방지)
 set backupdir=~/.vim/backup
 set directory=~/.vim/swap
+set undodir=~/.vim/undo
+set undofile
 
 " --- Python 개발 환경 설정 (선택 사항) ---
 " autocmd FileType python setlocal textwidth=79    " PEP 8 에 따라 코드 너비 79자로 제한
