@@ -32,3 +32,8 @@
 **Vulnerability:** By default, Vim and Neovim often create `.swp`, backup (`~`), and undo files in the current working directory. If a user edits sensitive files (e.g., `.env`, `credentials.json`) in a webroot or git repository, a crash or interrupted session can leave these temporary files behind. These files contain sensitive plaintext data and can be accidentally committed to source control or exposed directly over the web if the directory is publicly accessible.
 **Learning:** Default editor behaviors prioritize local recovery over data compartmentalization. Leaving state files in the same directory as the target file is a classic vector for accidental information disclosure.
 **Prevention:** Explicitly configure editor profiles (`.vimrc` and `init.lua`) to centralize all backup, swap, and undo files in a dedicated, out-of-band directory (e.g., `~/.vim/swap` or `~/.local/share/nvim/swap`) rather than the working directory.
+
+## 2026-04-10 - [Prevent Data Leakage via Vim Undo Files]
+**Vulnerability:** Vim creates `.un~` files (undo history) in the current working directory if `undofile` is set without specifying an `undodir`. This can inadvertently expose sensitive edit histories if left in a web-accessible directory or accidentally committed to source control.
+**Learning:** Even if swap and backup files are centralized, undo files can still leak historical data if their location isn't also explicitly configured to a central directory out of the project workspace.
+**Prevention:** Always set `undodir` to a centralized location (e.g., `~/.vim/undo`) before enabling `undofile` in Vim configuration files (`.vimrc`).
