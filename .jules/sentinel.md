@@ -37,3 +37,8 @@
 **Vulnerability:** Vim creates `.un~` files (undo history) in the current working directory if `undofile` is set without specifying an `undodir`. This can inadvertently expose sensitive edit histories if left in a web-accessible directory or accidentally committed to source control.
 **Learning:** Even if swap and backup files are centralized, undo files can still leak historical data if their location isn't also explicitly configured to a central directory out of the project workspace.
 **Prevention:** Always set `undodir` to a centralized location (e.g., `~/.vim/undo`) before enabling `undofile` in Vim configuration files (`.vimrc`).
+
+## 2024-04-12 - [Secure Command Existence Checks]
+**Vulnerability:** Checking for a command using an unquoted command substitution like `if test ! $(which brew); then` creates two issues: 1) It executes an external binary (`which`) that can be hijacked. 2) If the command is not found, `$(which brew)` expands to an empty string, rendering the condition as `test !`, which produces a syntax error in Bash (`bash: test: !: unary operator expected`), bypassing intended safeguards and causing unintended execution flow.
+**Learning:** Shell script conditional checks often overlook edge cases involving empty expansion, leading to silent bugs or security bypasses where dependencies are incorrectly assumed present.
+**Prevention:** Always use the POSIX-compliant shell built-in `command -v` with standard output/error redirection for existence checks: `if ! command -v <cmd> >/dev/null 2>&1; then`. This avoids external process spawning and cleanly handles absence via exit status without dangerous string manipulation.
