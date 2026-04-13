@@ -198,3 +198,4 @@ cython_debug/
 *.history
 .bash_history
 credentials.json
+.env.*
