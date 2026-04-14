@@ -7,6 +7,12 @@
 HISTSIZE=1000
 HISTFILESIZE=2000
 
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# Security: Require verification before executing history expansion (e.g., !!)
+shopt -s histverify
+
 # Security: Ignore history logging of commands starting with space or containing sensitive keywords
 HISTCONTROL=ignoreboth
 HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'

@@ -47,3 +47,8 @@
 **Vulnerability:** Development tools often create environment files (like `.env.local`, `.env.development`, `.env.production`) to manage secrets locally. If a catch-all rule like `.env.*` is missing from `.gitignore`, developers may accidentally commit environment files containing sensitive local credentials, API keys, or access tokens to version control.
 **Learning:** Hardcoding specific environment file names (like `.env`) in `.gitignore` is insufficient, as various frameworks and developers create derivative files.
 **Prevention:** Always add a catch-all exclusion like `.env.*` (in addition to `.env`) to `.gitignore` under a security section to proactively prevent any local environment configuration variants from being tracked by git.
+
+## 2024-04-14 - [Bash History Expansion Security]
+**Vulnerability:** Bash history expansion (e.g., `!!`, `!$`) executes immediately by default. If a user mistypes or forgets the exact previous command context, they might unintentionally execute a destructive or sensitive command immediately without a chance to review it.
+**Learning:** Shell convenience features like history expansion prioritize speed over safety, which can lead to accidental system changes or credential exposure if the expanded command contains unexpected arguments.
+**Prevention:** Always enable `shopt -s histverify` in bash dotfiles. This forces bash to load the expanded command into the readline editing buffer for user review instead of executing it immediately.
