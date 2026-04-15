@@ -52,3 +52,8 @@
 **Vulnerability:** Bash history expansion (e.g., `!!`, `!$`) executes immediately by default. If a user mistypes or forgets the exact previous command context, they might unintentionally execute a destructive or sensitive command immediately without a chance to review it.
 **Learning:** Shell convenience features like history expansion prioritize speed over safety, which can lead to accidental system changes or credential exposure if the expanded command contains unexpected arguments.
 **Prevention:** Always enable `shopt -s histverify` in bash dotfiles. This forces bash to load the expanded command into the readline editing buffer for user review instead of executing it immediately.
+
+## 2024-04-15 - [Prevent Accidental Leakage via Chezmoi File Prefixing]
+**Vulnerability:** Tools like Chezmoi use file prefixing (e.g., prepending `dot_` or `private_dot_` to file names) to represent hidden files in their source state. Standard `.gitignore` rules (like `.env*` or `.bash_history`) do not match these prefixed filenames. If a user manages environment files or shell histories via Chezmoi, these sensitive dotfiles are saved as `dot_env` or `dot_bash_history` in the Chezmoi directory and might be accidentally committed to a public dotfiles repository.
+**Learning:** Security exclusions in `.gitignore` must account for the specific naming conventions and path manipulations of the configuration management tools in use, not just standard system filenames.
+**Prevention:** Always append explicitly renamed secrets (like `dot_bash_history`, `dot_env`, `dot_npmrc`, `private_*`) to `.gitignore` when setting up a dotfiles repository managed by Chezmoi.

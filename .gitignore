@@ -199,3 +199,6 @@ cython_debug/
 .bash_history
 credentials.json
 .env.*
+dot_bash_history
+dot_env
+dot_npmrc
