@@ -202,3 +202,4 @@ credentials.json
 dot_bash_history
 dot_env
 dot_npmrc
+private_*
