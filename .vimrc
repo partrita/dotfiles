@@ -3,6 +3,8 @@
 " --- 기본 설정 ---
 syntax on             " 구문 강조 켜기
 set encoding=utf-8    " 파일 인코딩을 UTF-8로 설정
+" 보안: 파일 내부에 삽입된 Vim 명령어(modeline) 자동 실행 방지 (임의 코드 실행 취약점 방어)
+set nomodeline
 set fileencodings=utf-8,euc-kr " 여러 인코딩 지원
 set nu                " 줄 번호 표시 (set number 와 동일)
 set relativenumber    " 상대적 줄 번호 표시 (커서 위치 기준)
