@@ -326,3 +326,4 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 print("Neovim 설정 (init.lua) 로드 완료!")
+vim.opt.modeline = false
