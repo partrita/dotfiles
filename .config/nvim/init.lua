@@ -2,6 +2,8 @@
 -- ~/.config/nvim/init.lua
 
 -- --- 기본 설정 ---
+-- 보안: 파일 내부에 삽입된 Vim 명령어(modeline) 자동 실행 방지 (임의 코드 실행 취약점 방어)
+vim.opt.modeline = false
 vim.opt.encoding = 'utf-8' -- 파일 인코딩 UTF-8
 vim.opt.number = true -- 줄 번호 표시
 vim.opt.relativenumber = true -- 상대적 줄 번호 표시
