@@ -57,6 +57,10 @@
 **Vulnerability:** Tools like Chezmoi use file prefixing (e.g., prepending `dot_` or `private_dot_` to file names) to represent hidden files in their source state. Standard `.gitignore` rules (like `.env*` or `.bash_history`) do not match these prefixed filenames. If a user manages environment files or shell histories via Chezmoi, these sensitive dotfiles are saved as `dot_env` or `dot_bash_history` in the Chezmoi directory and might be accidentally committed to a public dotfiles repository.
 **Learning:** Security exclusions in `.gitignore` must account for the specific naming conventions and path manipulations of the configuration management tools in use, not just standard system filenames.
 **Prevention:** Always append explicitly renamed secrets (like `dot_bash_history`, `dot_env`, `dot_npmrc`, `private_*`) to `.gitignore` when setting up a dotfiles repository managed by Chezmoi.
+## 2024-04-18 - Disable Vim/Neovim modelines to prevent arbitrary code execution
+**Vulnerability:** Vim and Neovim modelines allow files to execute arbitrary configuration commands when opened, which can lead to remote code execution (e.g. CVE-2019-12735) if untrusted files are viewed.
+**Learning:** Modelines were enabled by default or left unconfigured, posing a significant risk in dotfiles used to view arbitrary logs or files from untrusted sources.
+**Prevention:** Explicitly disable modelines (`set nomodeline` and `vim.opt.modeline = false`) globally in editor configurations to ensure default safety when opening any files.
 
 ## 2024-05-19 - [Disable Vim Modelines to Prevent Arbitrary Code Execution]
 **Vulnerability:** Vim and Neovim allow embedding editor commands directly within a text file using a feature called "modelines". If a user opens a maliciously crafted file, these embedded commands are automatically executed. Historically, this feature has been a vector for arbitrary code execution vulnerabilities, allowing attackers to compromise the system simply by having the user view a file.
