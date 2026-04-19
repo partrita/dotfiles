@@ -61,3 +61,8 @@
 **Vulnerability:** Vim and Neovim modelines allow files to execute arbitrary configuration commands when opened, which can lead to remote code execution (e.g. CVE-2019-12735) if untrusted files are viewed.
 **Learning:** Modelines were enabled by default or left unconfigured, posing a significant risk in dotfiles used to view arbitrary logs or files from untrusted sources.
 **Prevention:** Explicitly disable modelines (`set nomodeline` and `vim.opt.modeline = false`) globally in editor configurations to ensure default safety when opening any files.
+
+## 2024-05-19 - [Disable Vim Modelines to Prevent Arbitrary Code Execution]
+**Vulnerability:** Vim and Neovim allow embedding editor commands directly within a text file using a feature called "modelines". If a user opens a maliciously crafted file, these embedded commands are automatically executed. Historically, this feature has been a vector for arbitrary code execution vulnerabilities, allowing attackers to compromise the system simply by having the user view a file.
+**Learning:** Convenience features that automatically execute embedded instructions upon file access inherently increase the attack surface and pose significant risks, especially when reviewing code or logs from untrusted sources.
+**Prevention:** Always explicitly disable modeline support in Vim (`set nomodeline` and `set modelines=0` in `.vimrc`) and Neovim (`vim.opt.modeline = false` and `vim.opt.modelines = 0` in `init.lua`) configurations to prevent any unintended code execution when opening files.
