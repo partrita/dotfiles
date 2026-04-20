@@ -66,3 +66,8 @@
 **Vulnerability:** Vim and Neovim allow embedding editor commands directly within a text file using a feature called "modelines". If a user opens a maliciously crafted file, these embedded commands are automatically executed. Historically, this feature has been a vector for arbitrary code execution vulnerabilities, allowing attackers to compromise the system simply by having the user view a file.
 **Learning:** Convenience features that automatically execute embedded instructions upon file access inherently increase the attack surface and pose significant risks, especially when reviewing code or logs from untrusted sources.
 **Prevention:** Always explicitly disable modeline support in Vim (`set nomodeline` and `set modelines=0` in `.vimrc`) and Neovim (`vim.opt.modeline = false` and `vim.opt.modelines = 0` in `init.lua`) configurations to prevent any unintended code execution when opening files.
+
+## 2024-04-20 - Prevent Bash Audit Logging Bypass via Environment Override
+**Vulnerability:** Bash history variables like `HISTFILE` were made readonly without being explicitly initialized first. An attacker could run `HISTFILE=/dev/null bash`, causing the shell to inherit the malicious value and lock it as readonly, effectively disabling audit logging for that session.
+**Learning:** Making security-critical variables readonly is insufficient if their initial values are inherited from an untrusted environment.
+**Prevention:** Always explicitly define security-critical variables like `HISTFILE` (e.g., `HISTFILE="${HOME}/.bash_history"`) before applying the `readonly` attribute to ensure they cannot be spoofed via environment variables.
