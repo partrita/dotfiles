@@ -19,6 +19,10 @@ shopt -s histappend
 shopt -s histverify
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+# Security: Explicitly define HISTFILE to prevent environment override (e.g., HISTFILE=/dev/null bash)
+export HISTFILE="${HOME}/.bash_history"
+touch "$HISTFILE" 2>/dev/null || true
+chmod 600 "$HISTFILE" 2>/dev/null || true
 HISTSIZE=1000
 HISTFILESIZE=2000
 

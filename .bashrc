@@ -4,6 +4,13 @@
 
 # 셸 옵션 설정
 # 히스토리 크기 설정
+
+# Security: Explicitly define HISTFILE to prevent environment override (e.g., HISTFILE=/dev/null bash)
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTFILE="; then
+    export HISTFILE="${HOME}/.bash_history"
+    touch "$HISTFILE" 2>/dev/null || true
+    chmod 600 "$HISTFILE" 2>/dev/null || true
+fi
 HISTSIZE=1000
 HISTFILESIZE=2000
 
