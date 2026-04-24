@@ -10,7 +10,9 @@ esac
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
-HISTCONTROL=ignoreboth
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTCONTROL="; then
+    HISTCONTROL=ignoreboth
+fi
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -20,17 +22,27 @@ shopt -s histverify
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 # Security: Explicitly define HISTFILE to prevent environment override (e.g., HISTFILE=/dev/null bash)
-export HISTFILE="${HOME}/.bash_history"
-touch "$HISTFILE" 2>/dev/null || true
-chmod 600 "$HISTFILE" 2>/dev/null || true
-HISTSIZE=1000
-HISTFILESIZE=2000
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTFILE="; then
+    export HISTFILE="${HOME}/.bash_history"
+    touch "$HISTFILE" 2>/dev/null || true
+    chmod 600 "$HISTFILE" 2>/dev/null || true
+fi
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTSIZE="; then
+    HISTSIZE=1000
+fi
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTFILESIZE="; then
+    HISTFILESIZE=2000
+fi
 
 # Security: Ignore history logging of commands containing sensitive keywords
-HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTIGNORE="; then
+    HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
+fi
 
 # Security: Add timestamps to history for audit logging and flush immediately
-export HISTTIMEFORMAT="%F %T "
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTTIMEFORMAT="; then
+    export HISTTIMEFORMAT="%F %T "
+fi
 export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND:-}"
 
 # Security: Prevent tampering with history variables by making them readonly
