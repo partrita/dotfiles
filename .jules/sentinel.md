@@ -71,3 +71,8 @@
 **Vulnerability:** Bash history variables like `HISTFILE` were made readonly without being explicitly initialized first. An attacker could run `HISTFILE=/dev/null bash`, causing the shell to inherit the malicious value and lock it as readonly, effectively disabling audit logging for that session.
 **Learning:** Making security-critical variables readonly is insufficient if their initial values are inherited from an untrusted environment.
 **Prevention:** Always explicitly define security-critical variables like `HISTFILE` (e.g., `HISTFILE="${HOME}/.bash_history"`) before applying the `readonly` attribute to ensure they cannot be spoofed via environment variables.
+
+## 2024-05-15 - Prevent Readonly Errors on Bash Re-sourcing
+**Vulnerability:** Bash configuration files (`.bashrc`, `dot_bashrc`) were causing errors when re-sourced because variables like `HISTSIZE` were made `readonly` at the end of the file, but their assignment at the top of the file lacked checks. This could cause shell initialization scripts to fail midway and break environments.
+**Learning:** When applying `readonly` to variables in bash scripts, any subsequent assignments to those variables will trigger a runtime error and stop execution. This is especially problematic in `.bashrc` which users frequently re-source.
+**Prevention:** Always wrap variable assignments in a readonly check before assignment using `if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* VAR_NAME="; then VAR_NAME=value; fi` if the variable might be made readonly later.
