@@ -76,3 +76,8 @@
 **Vulnerability:** Bash profiles (`.bashrc`, `dot_bashrc`) crashed with "readonly variable" errors when re-sourced because history security variables (`HISTSIZE`, `HISTCONTROL`, etc.) were assigned values and then made readonly. Re-running the script attempts to reassign the readonly variables, breaking shell initialization.
 **Learning:** Security hardening must not break usability. Making variables readonly is correct, but the assignment itself must first check if the variable is already readonly.
 **Prevention:** Wrap variable assignments in a readonly check (`if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* VAR_NAME="; then VAR_NAME=value; fi`) to ensure idempotent execution.
+
+## 2024-05-20 - [Prevent Accidental File Overwrites via Redirection]
+**Vulnerability:** In Bash, the default behavior of the redirection operator `>` is to overwrite the target file if it already exists. This can lead to accidental data loss or file corruption if a user mistypes a command (e.g., `echo "data" > important_file.txt` instead of `>>`).
+**Learning:** Shell defaults prioritize convenience over safety when redirecting output, which can be dangerous in interactive sessions where human error is common.
+**Prevention:** Always enable `set -o noclobber` (or `set -C`) in Bash profiles (`.bashrc`, `dot_bashrc`). This prevents accidental overwrites using `>`, forcing the user to use the explicit overwrite operator `>|` if they truly intend to overwrite an existing file.

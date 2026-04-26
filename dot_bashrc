@@ -17,6 +17,9 @@ fi
 # append to the history file, don't overwrite it
 shopt -s histappend
 
+# Security: Prevent accidental overwriting of existing files via redirection (e.g., >)
+set -o noclobber
+
 # Security: Require verification before executing history expansion (e.g., !!)
 shopt -s histverify
 
