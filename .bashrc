@@ -11,8 +11,12 @@ if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTFILE="; then
     touch "$HISTFILE" 2>/dev/null || true
     chmod 600 "$HISTFILE" 2>/dev/null || true
 fi
-HISTSIZE=1000
-HISTFILESIZE=2000
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTSIZE="; then
+    HISTSIZE=1000
+fi
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTFILESIZE="; then
+    HISTFILESIZE=2000
+fi
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -21,11 +25,17 @@ shopt -s histappend
 shopt -s histverify
 
 # Security: Ignore history logging of commands starting with space or containing sensitive keywords
-HISTCONTROL=ignoreboth
-HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTCONTROL="; then
+    HISTCONTROL=ignoreboth
+fi
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTIGNORE="; then
+    HISTIGNORE='*password*:*secret*:*key*:*token*:*sudo -S*'
+fi
 
 # Security: Add timestamps to history for audit logging and flush immediately
-export HISTTIMEFORMAT="%F %T "
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTTIMEFORMAT="; then
+    export HISTTIMEFORMAT="%F %T "
+fi
 export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND:-}"
 
 # Security: Prevent tampering with history variables by making them readonly
