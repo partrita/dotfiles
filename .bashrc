@@ -22,7 +22,7 @@ fi
 shopt -s histappend
 
 # Security: Prevent accidental overwriting of existing files via redirection (e.g., >)
-set -o noclobber
+[[ $- == *i* ]] && set -o noclobber
 
 # Security: Require verification before executing history expansion (e.g., !!)
 shopt -s histverify
