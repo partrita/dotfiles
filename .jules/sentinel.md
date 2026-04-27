@@ -72,7 +72,12 @@
 **Learning:** Making security-critical variables readonly is insufficient if their initial values are inherited from an untrusted environment.
 **Prevention:** Always explicitly define security-critical variables like `HISTFILE` (e.g., `HISTFILE="${HOME}/.bash_history"`) before applying the `readonly` attribute to ensure they cannot be spoofed via environment variables.
 
-## 2024-05-15 - Prevent Readonly Errors on Bash Re-sourcing
-**Vulnerability:** Bash configuration files (`.bashrc`, `dot_bashrc`) were causing errors when re-sourced because variables like `HISTSIZE` were made `readonly` at the end of the file, but their assignment at the top of the file lacked checks. This could cause shell initialization scripts to fail midway and break environments.
-**Learning:** When applying `readonly` to variables in bash scripts, any subsequent assignments to those variables will trigger a runtime error and stop execution. This is especially problematic in `.bashrc` which users frequently re-source.
-**Prevention:** Always wrap variable assignments in a readonly check before assignment using `if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* VAR_NAME="; then VAR_NAME=value; fi` if the variable might be made readonly later.
+## 2024-05-18 - Prevent script crashes from readonly security variables
+**Vulnerability:** Bash profiles (`.bashrc`, `dot_bashrc`) crashed with "readonly variable" errors when re-sourced because history security variables (`HISTSIZE`, `HISTCONTROL`, etc.) were assigned values and then made readonly. Re-running the script attempts to reassign the readonly variables, breaking shell initialization.
+**Learning:** Security hardening must not break usability. Making variables readonly is correct, but the assignment itself must first check if the variable is already readonly.
+**Prevention:** Wrap variable assignments in a readonly check (`if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* VAR_NAME="; then VAR_NAME=value; fi`) to ensure idempotent execution.
+
+## 2024-05-20 - [Prevent Accidental File Overwrites via Redirection]
+**Vulnerability:** In Bash, the default behavior of the redirection operator `>` is to overwrite the target file if it already exists. This can lead to accidental data loss or file corruption if a user mistypes a command (e.g., `echo "data" > important_file.txt` instead of `>>`).
+**Learning:** Shell defaults prioritize convenience over safety when redirecting output, which can be dangerous in interactive sessions where human error is common.
+**Prevention:** Always enable `set -o noclobber` (or `set -C`) in Bash profiles (`.bashrc`, `dot_bashrc`). This prevents accidental overwrites using `>`, forcing the user to use the explicit overwrite operator `>|` if they truly intend to overwrite an existing file.
