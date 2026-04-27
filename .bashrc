@@ -11,7 +11,7 @@ if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTFILE="; then
     touch "$HISTFILE" 2>/dev/null || true
     chmod 600 "$HISTFILE" 2>/dev/null || true
 fi
-if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTSIZE="; then
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTSIZE\b"; then
     HISTSIZE=1000
 fi
 if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTFILESIZE="; then
