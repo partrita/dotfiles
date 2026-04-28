@@ -48,6 +48,12 @@ if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* HISTTIMEFORMAT="; then
 fi
 export PROMPT_COMMAND="history -a; ${PROMPT_COMMAND:-}"
 
+# Security: Prevent less pager from writing search history to disk (credential leakage prevention)
+if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* LESSHISTFILE="; then
+    export LESSHISTFILE="-"
+    readonly LESSHISTFILE
+fi
+
 # Security: Prevent tampering with history variables by making them readonly
 for var in HISTFILE HISTSIZE HISTFILESIZE HISTIGNORE HISTCONTROL HISTTIMEFORMAT; do
     if ! readonly -p | grep -q "^declare -[^ =]*r[^ =]* ${var}="; then
