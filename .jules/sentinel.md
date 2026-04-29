@@ -81,3 +81,8 @@
 **Vulnerability:** In Bash, the default behavior of the redirection operator `>` is to overwrite the target file if it already exists. This can lead to accidental data loss or file corruption if a user mistypes a command (e.g., `echo "data" > important_file.txt` instead of `>>`).
 **Learning:** Shell defaults prioritize convenience over safety when redirecting output, which can be dangerous in interactive sessions where human error is common.
 **Prevention:** Always enable `set -o noclobber` (or `set -C`) in Bash profiles (`.bashrc`, `dot_bashrc`). This prevents accidental overwrites using `>`, forcing the user to use the explicit overwrite operator `>|` if they truly intend to overwrite an existing file.
+
+## 2024-05-21 - [Prevent Credential Leakage via Less Pager History]
+**Vulnerability:** By default, the `less` pager writes search history to `~/.lesshst`. If a user views files containing sensitive data (e.g., passwords, API keys, tokens) and searches for them using `less`, these sensitive terms can be inadvertently written to disk in plain text.
+**Learning:** Command-line tools like `less` maintain their own history files that bypass Bash audit controls and `.bash_history` restrictions, requiring tool-specific environment variables to secure.
+**Prevention:** Export `LESSHISTFILE="-"` in shell configuration files (`.bashrc`, `dot_bashrc`) to completely disable the `less` pager from writing search history to disk.
