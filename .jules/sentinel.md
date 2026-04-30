@@ -86,3 +86,8 @@
 **Vulnerability:** By default, the `less` pager writes search history to `~/.lesshst`. If a user views files containing sensitive data (e.g., passwords, API keys, tokens) and searches for them using `less`, these sensitive terms can be inadvertently written to disk in plain text.
 **Learning:** Command-line tools like `less` maintain their own history files that bypass Bash audit controls and `.bash_history` restrictions, requiring tool-specific environment variables to secure.
 **Prevention:** Export `LESSHISTFILE="-"` in shell configuration files (`.bashrc`, `dot_bashrc`) to completely disable the `less` pager from writing search history to disk.
+
+## 2024-05-22 - [Prevent Accidental File Deletion/Overwrite via Interactive Aliases]
+**Vulnerability:** In Bash, default commands like `rm`, `cp`, and `mv` operate silently and will irreversibly delete or overwrite files without warning. In an interactive session, a typo (e.g., `rm * .txt` instead of `rm *.txt`) can result in catastrophic data loss.
+**Learning:** Shell defaults are designed for scripting efficiency and assume the user knows exactly what they are doing. This lack of guardrails is dangerous for interactive human use.
+**Prevention:** Always define interactive aliases (`alias rm='rm -i'`, `alias cp='cp -i'`, `alias mv='mv -i'`) in shell configuration files (`.bashrc`, `dot_bashrc`). This forces the shell to prompt for confirmation before performing destructive actions, providing a crucial safety net for human error.

@@ -75,6 +75,11 @@ alias ll='ls -alF' # 자세히 보기
 alias la='ls -A'   # 숨김 파일 포함
 alias l='ls -CF'   # 컬러 출력
 
+# Security: Require confirmation before overwriting or deleting files
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
 # Jupyter Notebook 기본 설정
 # 자동완성 기능 활성화 (Tab 키)
 # (Jupyter 자체 설정 파일에서 주로 관리하지만, 편의상 bashrc에 추가적인 설정을 넣을 수도 있습니다.)
